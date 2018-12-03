@@ -5,8 +5,16 @@ fv_mean = [mean(fv(:,1)) mean(fv(:,2)) mean(fv(:,3))]
 
 N = size(fv, 1);
 
-C_unbiased = cov(fv)
+% C_unbiased = cov(fv)
 
 C_biased = (N-1)*C_unbiased / N % MLE biased cov
 
-mvn = mvnpdf(%this is probably the vector they give ..fv,fv_mean,C_biased)
+
+
+q14 = [5 5 6]
+q15 = [3 5 7]
+q16 = [4 6.5 1]
+
+mvn14 = round(mvnpdf(q14,fv_mean,C_biased),6,'significant')
+mvn15 = round(mvnpdf(q15,fv_mean,C_biased),6,'significant')
+mvn16 = round(mvnpdf(q16,fv_mean,C_biased),6,'significant')
