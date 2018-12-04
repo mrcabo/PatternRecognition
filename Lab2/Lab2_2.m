@@ -22,4 +22,4 @@ for i= 1:size(v,2)
 end
 
 mine = simplify(covM)
-matlab = simplify(cov(v));
+%matlab = simplify(cov(v));
