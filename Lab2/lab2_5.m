@@ -1,3 +1,5 @@
+close all;
+
 mu1 = [3 ; 5];
 trans_mu1 = transpose(mu1);
 cov1 = [1 0;0 4];
@@ -26,23 +28,19 @@ ln_p_w2 = log(p_w2);
 
 syms x y 
 g_x1 =  -(1/2) * [x-trans_mu1(1),y-trans_mu1(2)]* inv_cov1*[x-mu1(1) ; y-mu1(2)] -(1/2)*ln_abs1+ ln_p_w1;
-g_x1 = expand(vpa(g_x1,5))
+lab_g_x1 = expand(vpa(g_x1,5))
 
 
 g_x2 =  -(1/2) * [x-trans_mu2(1),y-trans_mu2(2)]* inv_cov2*[x-mu2(1) ; y-mu2(2)]-(1/2)*ln_abs2+ ln_p_w2;
-g_x2 = expand(vpa(g_x2,5))
+lab_g_x2 = expand(vpa(g_x2,5))
 
-decision_boundary = g_x1-g_x2
- 
-eqn1 = g_x1-g_x2 == 0;
-sol = solve(eqn1, [x, y]);
-xSol = sol.x
-ySol = sol.y
+decision_boundary = g_x1-g_x2;
+lab_decision_boundary = expand(vpa(decision_boundary,5))
 
-f = @(x,y) decision_boundary;
-xcon = xSol;
+f(x,y) = decision_boundary;
 
-fun = @(y) f(y,xcon);
-ymin = ySol(1);
-ymax = ySol(2);
-fplot(fun, [ymin, ymax])
+fimplicit(f, [-10 20])
+xlabel("X axis")
+ylabel("Y axis")
+
+
