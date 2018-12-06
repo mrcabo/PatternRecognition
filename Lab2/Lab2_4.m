@@ -15,6 +15,6 @@ for i = 1:Npeople
 end
 
 h = histogram(score_sum)
-xlabel('NÂº tails in a 100 throws')
-ylabel('NÂº people with same score')
+xlabel('Nº tails in a 100 throws')
+ylabel('Nº people with same score')
 % plot()

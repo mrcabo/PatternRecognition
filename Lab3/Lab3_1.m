@@ -22,3 +22,30 @@ p_fa = 1-normcdf(x_decisionCrit,mu1,sigma)
 p_hit = 1-normcdf(x_decisionCrit,mu2,sigma)
 
 discriminability = abs(mu2-mu1)/sigma
+
+
+lab3_1_data = load('X:\My Documents\PatternRecognition\repo\Lab3\Data\lab3_1.mat');
+
+binData = num2str(lab3_1_data.outcomes);
+decData = bin2dec(binData);
+
+close all
+
+h = histogram(decData)
+signal_present = h.Values(4)+ h.Values(3);
+signal_notPresent = h.Values(1) + h.Values(2);
+hit_rate = h.Values(4) / signal_present
+fa = h.Values(2) / signal_notPresent
+
+
+close all
+
+a = []
+b = [hit_rate, fa]
+c = 'hit'
+
+
+
+[X,Y] = perfcurve(a,b,c);
+plot(X,Y)
+
