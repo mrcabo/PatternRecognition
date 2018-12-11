@@ -1,6 +1,6 @@
 clear all;
 close all;
-load lab3_2.mat;
+load 'Data/lab3_2.mat';
 
 K=1;
 data = lab3_2;
@@ -29,6 +29,8 @@ for K = 1:2:Kmax
  
 end
 [min_err, idx] = min(err_count(1:11))
+err_count = err_count / size(data,1)
+
 plot (1:2:Kmax,err_count);
 labels = sprintf('d=%1.3f',err_count);
 xlabel('Ks')
