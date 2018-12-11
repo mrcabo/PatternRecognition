@@ -17,8 +17,51 @@ result_w = calcPhi(h, w, cat1.x_w1, cat2.x_w2, cat3.x_w3);
 
 
 
+mu1 = mean(cat1.x_w1);
+mu2 = mean(cat2.x_w2);
+mu3 = mean(cat3.x_w3);
 
-% scatter3(cat1.x_w1(:,1),cat1.x_w1(:,2),cat1.x_w1(:,3))
+l = h/2;
+
+count = 0;
+for i = 1:10
+    if abs(mu1(1)-cat1.x_w1(i,1)) < l && abs(mu1(2)-cat1.x_w1(i,2)) < l && abs(mu1(3)-cat1.x_w1(i,3)) < l
+        count = count + 1;
+    end
+end
+prior1 = count / 10
+
+count = 0;
+for i = 1:10
+    if abs(mu2(1)-cat2.x_w2(i,1)) < l && abs(mu2(2)-cat2.x_w2(i,2)) < l && abs(mu2(3)-cat2.x_w2(i,3)) < l
+        count = count + 1;
+    end
+end
+prior2 = count /10
+
+count = 0;
+for i = 1:10
+    if abs(mu3(1)-cat3.x_w3(i,1)) < l && abs(mu3(1)-cat3.x_w3(i,2)) < l && abs(mu3(1)-cat3.x_w3(i,3)) < l
+        count = count + 1;
+    end
+end
+prior3 = count / 10
+
+% for i = 1:10
+%     aux = cat1.x_w1(i,1)*cat1.x_w1(i,2)*cat1.x_w1(i,3);
+%     if aux <= 1
+%         count = count + 1;
+%     end        
+% end
+% prior1 = count / 10
+
+
+
+
+scatter3(cat1.x_w1(:,1),cat1.x_w1(:,2),cat1.x_w1(:,3))
+hold on 
+scatter3(mu1(1),mu1(2),mu1(3),'MarkerFaceColor',[0 .75 .75])
+% scatter3(cat2.x_w2(:,1),cat2.x_w2(:,2),cat2.x_w2(:,3))
 
 
 
