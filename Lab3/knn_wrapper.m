@@ -4,9 +4,9 @@ close all
 load lab3_2.mat;
 % load KNN.m;
 
-K=7;
+K=1;
 samples=64;
-data = lab3_2;
+data = lab3_3;
 nr_of_classes = 4;
 
 % Class labels
