@@ -13,6 +13,7 @@ imshow(BW)
 [H,T,R] = myhough(BW);
 
 f2 = figure;
+sgtitle("S3736555 , S3559734")
 subplot(1,2,1);
 imagesc(imadjust(rescale(H)),'XData',T,'YData',R)
 title("myhough.m");
