@@ -1,9 +1,12 @@
 % clear all
 close all
 % Getting an image
-im	=	imread('Cameraman.tiff');	
+filename = './Data/Cameraman.tiff';
+im = imread(filename);
 %FIND	EDGES	
-BW	=	edge(im,'canny');	
+BW = edge(im,'canny');
+f1 = figure;
+imshow(BW)
 %COMPUTE	THE	HOUGH	TRANSFORM	
 [HS,T,R] = hough(BW);	
 
@@ -12,15 +15,13 @@ BW	=	edge(im,'canny');
 theta_arr = (-90:89);
 theta_min = min(theta_arr);
 theta_max = max(theta_arr);
-[y,x] = find(im);
-% y = y - 1;
-% x = x - 1;
-%rho = cell(1,numel(x));
-diag_img= diag(im);
+[y,x] = find(BW);
+
+diag_img= diag(BW);
 rho_min = -length(diag_img);
-rho_max = length(diag_img)-1;
-% rho_array = (rho_min:rho_max);
-rho_array = (-361:361);
+rho_max = length(diag_img);
+rho_array = (rho_min:rho_max);
+% rho_array = (-361:361);
 H = zeros(length(theta_arr),length(rho_array));
 
 % Calculating the Hough Transform
@@ -32,13 +33,6 @@ for i = 1: numel(x)
         rho = round(rho);
         rho_index = find(rho_array==rho,1);
         H(thetai,rho_index) = H(thetai,rho_index)+1;
-%         for i = 1:
-%             thetai = thetai + 1;
-%             for j = rho_min:rho_max
-%                 rhoj = rohj+1;
-%                 H(thetai,rhoj) = H(thetai,rhoj)+1;
-%             end
-%         end
     end
 end
 
@@ -53,8 +47,13 @@ H = transpose(H);
 %         HS(rho{i}(j),j) = HS(rho{i}(j),j) + 1; 
 %     end
 % end
-f2=figure
+f2 = figure
 % imshow(HS)
-imagesc(imadjust(rescale(H),'XData',theta_arr,'YData',rho_array))
-xlabe('\theta'),ylable('\rho');
+imagesc(imadjust(rescale(H)),'XData',theta_arr,'YData',rho_array)
+xlabel('\theta'),ylabel('\rho');
+axis on, axis normal, hold on;
+
+f3 = figure;
+imagesc(imadjust(rescale(HS)),'XData',T,'YData',R)
+xlabel('\theta'),ylabel('\rho');
 axis on, axis normal, hold on;
