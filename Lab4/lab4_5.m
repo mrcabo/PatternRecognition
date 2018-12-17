@@ -12,6 +12,7 @@ P2 = abs(y/L);
 P1 = P2(1:L/2+1);
 P1(2:end-1) = 2*P1(2:end-1);
 f = Fs*(0:(L/2))/L;
+f1 = figure;
 plot(f,P1) 
 title('Magnitude')
 
@@ -24,6 +25,8 @@ P3 = abs(filtered/L);
 P4 = P3(1:L/2+1);
 P4(2:end-1) = 2*P4(2:end-1);
 f = Fs*(0:(L/2))/L;
+f2 = figure;
+figure(f2)
 plot(f,P4) 
 title('filter')
 audiowrite('filterd.wav',filtered,Fs);
