@@ -1,7 +1,7 @@
 close all
 
-data_lvq_A = load('X:\My Documents\PR\PatternRecognition\repo\Lab5/Data/data_lvq_A.mat');
-data_lvq_B = load('X:\My Documents\PR\PatternRecognition\repo\Lab5/Data/data_lvq_B.mat');
+data_lvq_A = load('E:\RUG\2-2\Pattern Recognition\Labs\Lab5/Data/data_lvq_A.mat');
+data_lvq_B = load('E:\RUG\2-2\Pattern Recognition\Labs\Lab5/Data/data_lvq_B.mat');
 data_lvq_A = data_lvq_A.matA;
 data_lvq_B = data_lvq_B.matB;
 
@@ -33,11 +33,11 @@ B_10 = data_lvq_B(k(10):k(10)+m-1,:);
 %train = [data_lvq_A(1:k-1,:); data_lvq_A(k+m:end,:)]
 %adj=edge(train,data_lvq_A);
 
-train = cat(1,A_2,A_3,A_4,A_5,A_6,A_7,A_8,A_9,A_10);
+train = append(A_2,A_3,A_4,A_5,A_6,A_7,A_8,A_9,A_10);
 Test = A_1;
 
-p = randperm(length(train));
-
+p = randperm(length(dataset));
+dataset = [dataset(p,1), dataset(p,2)];
 labels = [zeros(length(data_lvq_A),1);ones(length(data_lvq_B),1)];
 labels = labels(p);
 
@@ -58,7 +58,7 @@ f1 = figure;
 scatter(data_lvq_A(:,1),data_lvq_A(:,2),[],'r')
 hold on;
 scatter(data_lvq_B(:,1),data_lvq_B(:,2),[],'g')
-title('S3559734')
+title('S3736555')
 xlabel('Feature 1')
 ylabel('Feature 2')
 
