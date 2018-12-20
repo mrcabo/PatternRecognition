@@ -23,9 +23,12 @@ ylabel('Feature 2')
 
 % A good point for initialize protoypes
 sortedA = sortrows(data_lvq_A,1);
+muA = mean(data_lvq_A);
 muA1 = mean(data_lvq_A(1:(length(sortedA)/2),:));
 muA2 = mean(data_lvq_A((length(sortedA)/2+1):length(sortedA),:));
 muB = mean(data_lvq_B);
+muB1 = muB+ [0,2];
+muB2 = muB+ [0,-2];
 
 hold on;
 scatter(muA1(1),muA1(2),[],'b','filled')
@@ -38,39 +41,94 @@ w = [muA1;muA2;muB];
 
 niter = 10000;
 learning_rate = 0.01;
-E = [];
-threshold = 0.01;
-for i = 1:niter
-    err = 0;
-    for j = 1:length(dataset)
-        xi = dataset(j,:);
-        d1=0; d2=0; d3=0;
-        for k = 1:size(dataset,2)
-            d1 = d1 + (w(1,k)-xi(k))^2;
-            d2 = d2 + (w(2,k)-xi(k))^2;
-            d3 = d3 + (w(3,k)-xi(k))^2;
-        end
-        [M,I] = min([d1,d2,d3]);
-        if I==3
-            S = 1;
-        else
-            S = 0;
-        end
-        if S==labels(j)
-            psi = 1;
-        else
-            psi = -1;
-            err = err + 1;
-        end
-        w(I,:) = w(I,:) + learning_rate*psi*(xi-w(I,:));
-    end
-    E = [E;err/length(labels)];
-end
+threshold = 1e-5;
+prototype_class = [0;0;1];
 
-
+[w, E] = lvq1(dataset, labels, w, learning_rate, threshold, prototype_class);
 hold on;
 scatter(w(1,1),w(1,2),150,'MarkerEdgeColor',[.5 .5 .5],'MarkerFaceColor','r')
 hold on;
 scatter(w(2,1),w(2,2),150,'MarkerEdgeColor',[.5 .5 .5],'MarkerFaceColor','r')
 hold on;
 scatter(w(3,1),w(3,2),150,'MarkerEdgeColor',[.5 .5 .5],'MarkerFaceColor','g')
+
+
+
+% Different n of prototypes
+% n=1,1
+f2 = figure;
+scatter(data_lvq_A(:,1),data_lvq_A(:,2),[],'r')
+hold on;
+scatter(data_lvq_B(:,1),data_lvq_B(:,2),[],'g')
+title('S3736555')
+xlabel('Feature 1')
+ylabel('Feature 2')
+
+prototype_class = [0;1];
+w = [mean(data_lvq_A); mean(data_lvq_B)];
+hold on;
+scatter(muA(1),muA(2),[],'b','filled')
+hold on;
+scatter(muB(1),muB(2),[],'b','filled')
+[w, E] = lvq1(dataset, labels, w, learning_rate, threshold, prototype_class);
+hold on;
+scatter(w(1,1),w(1,2),150,'MarkerEdgeColor',[.5 .5 .5],'MarkerFaceColor','r')
+hold on;
+scatter(w(2,1),w(2,2),150,'MarkerEdgeColor',[.5 .5 .5],'MarkerFaceColor','g')
+
+%n=1,2
+f3 = figure;
+scatter(data_lvq_A(:,1),data_lvq_A(:,2),[],'r')
+hold on;
+scatter(data_lvq_B(:,1),data_lvq_B(:,2),[],'g')
+title('S3736555')
+xlabel('Feature 1')
+ylabel('Feature 2')
+
+prototype_class = [0;1;1];
+w = [muA;muB1;muB2];
+hold on;
+scatter(muA(1),muA(2),[],'b','filled')
+hold on;
+scatter(muB1(1),muB1(2),[],'b','filled')
+hold on;
+scatter(muB2(1),muB2(2),[],'b','filled')
+[w, E] = lvq1(dataset, labels, w, learning_rate, threshold, prototype_class);
+hold on;
+scatter(w(1,1),w(1,2),150,'MarkerEdgeColor',[.5 .5 .5],'MarkerFaceColor','r')
+hold on;
+scatter(w(2,1),w(2,2),150,'MarkerEdgeColor',[.5 .5 .5],'MarkerFaceColor','g')
+hold on;
+scatter(w(3,1),w(3,2),150,'MarkerEdgeColor',[.5 .5 .5],'MarkerFaceColor','g')
+
+% n=2,2
+f4 = figure;
+scatter(data_lvq_A(:,1),data_lvq_A(:,2),[],'r')
+hold on;
+scatter(data_lvq_B(:,1),data_lvq_B(:,2),[],'g')
+title('S3736555')
+xlabel('Feature 1')
+ylabel('Feature 2')
+
+prototype_class = [0;0;1;1];
+w = [muA1;muA2;muB1;muB2];
+
+hold on;
+scatter(muA1(1),muA1(2),[],'b','filled')
+hold on;
+scatter(muA2(1),muA2(2),[],'b','filled')
+hold on;
+scatter(muB1(1),muB2(2),[],'b','filled')
+hold on;
+scatter(muB2(1),muB2(2),[],'b','filled')
+
+% threshold = 1e-7;
+[w, E] = lvq1(dataset, labels, w, learning_rate, threshold, prototype_class);
+hold on;
+scatter(w(1,1),w(1,2),150,'MarkerEdgeColor',[.5 .5 .5],'MarkerFaceColor','r')
+hold on;
+scatter(w(2,1),w(2,2),150,'MarkerEdgeColor',[.5 .5 .5],'MarkerFaceColor','r')
+hold on;
+scatter(w(3,1),w(3,2),150,'MarkerEdgeColor',[.5 .5 .5],'MarkerFaceColor','g')
+hold on;
+scatter(w(4,1),w(4,2),150,'MarkerEdgeColor',[.5 .5 .5],'MarkerFaceColor','g')
