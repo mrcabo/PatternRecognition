@@ -31,25 +31,20 @@ m = ceil(n/10);
 k = 1:m:n;
 testset = zeros(m,2);
 trainset = zeros((length(dataset)-m),2);
+
 for i =1:size(k,2)
     testset = dataset(k(i):k(i)+m-1,:);
-    for j = 1:(length(dataset))
-        if testset(i) ~= dataset(j)
-            trainset(j) = dataset(j);
-        end
-    end
+    trainset = setdiff (dataset, testset, 'rows');
     
-[prototypes, trnE] = cvtrainlvq1(trainset,labels, prototypes, learning_rate, threshold, prototype_class);
-[prototypes, tstE] = cvtestlvq1(testset,labels, prototypes, learning_rate, threshold, prototype_class);
-trnE = mean(trnE);
-% bar(i,trnE)
-% hold on
-title('S3559734');
-xlabel('folds'), ylabel('classification errors');
+    [prototypes, trnE] = cvtrainlvq1(trainset,labels, prototypes, learning_rate, threshold, prototype_class);
+    [prototypes, tstE] = cvtestlvq1(testset,labels, prototypes, learning_rate, threshold, prototype_class);
+    trnE = mean(trnE);
+    % bar(i,trnE)
+    % hold on
+    title('S3559734');
+    xlabel('folds'), ylabel('classification errors');
 
-tstE = mean(tstE);
-bar(i,tstE)
-hold on
+    tstE = mean(tstE);
+    bar(i,tstE)
+    hold on
 end
-
-
