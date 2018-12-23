@@ -31,20 +31,26 @@ m = ceil(n/10);
 k = 1:m:n;
 testset = zeros(m,2);
 trainset = zeros((length(dataset)-m),2);
-
+trnE = zeros((length(dataset)-m),1);
+meantstE = 0;
 for i =1:size(k,2)
     testset = dataset(k(i):k(i)+m-1,:);
     trainset = setdiff (dataset, testset, 'rows');
     
-    [prototypes, trnE] = cvtrainlvq1(trainset,labels, prototypes, learning_rate, threshold, prototype_class);
+    [prototypes, trainE] = cvtrainlvq1(trainset,labels, prototypes, learning_rate, threshold, prototype_class);
     [prototypes, tstE] = cvtestlvq1(testset,labels, prototypes, learning_rate, threshold, prototype_class);
-    trnE = mean(trnE);
-    % bar(i,trnE)
-    % hold on
-    title('S3559734');
-    xlabel('folds'), ylabel('classification errors');
-
-    tstE = mean(tstE);
-    bar(i,tstE)
+    trnE = (mean(trainE)*100);
+    
+    bar(i,trnE)
     hold on
+    title('S3559734');
+    xlabel('folds'), ylabel('classification errors in percentage');
+    text(i,trnE,num2str(trnE'),'vert','bottom','horiz','center'); 
+    box off
+    
+    meantstE = meantstE + mean(tstE);
 end
+meantstE=(meantstE/10)*100;
+xlim=get(gca,'xlim');
+hold on
+plot(xlim,[meantstE meantstE])
