@@ -55,3 +55,83 @@ xlim=get(gca,'xlim');
 hold on
 plot(xlim,[meantstE meantstE])
 text(1,meantstE,num2str(meantstE'),'vert','bottom','horiz','center');
+function [prototypes, trnE] = cvtrainlvq1(traininset,labels, prototypes, learning_rate, threshold, prototype_class)
+trnE = [];
+keep = 1;
+limit = 10000;
+count = 0;
+while keep==1 && count<limit
+    err = 0;
+    for j = 1:length(traininset)
+        xi = traininset(j,:);
+        d = zeros(size(prototypes,1),1);
+        for k = 1:size(traininset,2)
+            for m = 1:length(d)
+                d(m) = d(m) + (prototypes(m,k)-xi(k))^2;
+            end
+        end
+        [M,I] = min(d);
+        if prototype_class(I)==labels(j)
+            psi = 1;
+        else
+            psi = -1;
+            err = err + 1;
+        end
+        prototypes(I,:) = prototypes(I,:) + learning_rate*psi*(xi-prototypes(I,:));
+    end
+    trnE = [trnE;err/length(labels)];
+    if length(trnE) > 100
+        variance = var(trnE(length(trnE)-10:length(trnE)));
+        if variance < threshold
+            keep = 0;
+        end
+    end
+    % Reshuffle data
+    p = randperm(length(traininset));
+    traininset = [traininset(p,1), traininset(p,2)];
+    labels = labels(p);
+    count = count +1;
+
+end
+
+end
+function [prototypes, tstE] = cvtestlvq1(testset,labels, prototypes, learning_rate, threshold, prototype_class)
+    tstE = [];
+    keep = 1;
+    limit = 10000;
+    count = 0;
+    while keep==1 && count<limit
+        testerr = 0;
+        for j = 1:length(testset)
+            xi = testset(j,:);
+            d = zeros(size(prototypes,1),1);
+            for k = 1:size(testset,2)
+                for m = 1:length(d)
+                    d(m) = d(m) + (prototypes(m,k)-xi(k))^2;
+                end
+            end
+            [M,I] = min(d);
+            if prototype_class(I)==labels(j)
+                psi = 1;
+            else
+                psi = -1;
+                testerr = testerr + 1;
+            end
+            prototypes(I,:) = prototypes(I,:) + learning_rate*psi*(xi-prototypes(I,:));
+        end
+        tstE = [tstE;testerr/length(labels)];
+        if length(tstE) > 100
+            variance = var(tstE(length(tstE)-10:length(tstE)));
+            if variance < threshold
+                keep = 0;
+            end
+        end
+        % Reshuffle data
+        p = randperm(length(testset));
+        testset = [testset(p,1), testset(p,2)];
+        labels = labels(p);
+        count = count +1;
+
+    end
+    
+end
