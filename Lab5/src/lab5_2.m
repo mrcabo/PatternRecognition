@@ -54,3 +54,4 @@ meantstE=(meantstE/10)*100;
 xlim=get(gca,'xlim');
 hold on
 plot(xlim,[meantstE meantstE])
+text(1,meantstE,num2str(meantstE'),'vert','bottom','horiz','center');
