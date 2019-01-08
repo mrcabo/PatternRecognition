@@ -1,7 +1,9 @@
 close all
 
-data_lvq_A = load('E:\RUG\2-2\Pattern Recognition\Labs\Lab5/Data/data_lvq_A.mat');
-data_lvq_B = load('E:\RUG\2-2\Pattern Recognition\Labs\Lab5/Data/data_lvq_B.mat');
+% data_lvq_A = load('E:\RUG\2-2\Pattern Recognition\Labs\Lab5/Data/data_lvq_A.mat');
+% data_lvq_B = load('E:\RUG\2-2\Pattern Recognition\Labs\Lab5/Data/data_lvq_B.mat');
+data_lvq_A = load('./Data/data_lvq_A.mat');
+data_lvq_B = load('./Data/data_lvq_B.mat');
 data_lvq_A = data_lvq_A.matA;
 data_lvq_B = data_lvq_B.matB;
 
