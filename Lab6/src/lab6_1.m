@@ -1,5 +1,5 @@
 close all;
-clear all;
+% clear all;
 
 dataset = load('data/kmeans1.mat');
 dataset = dataset.kmeans1;
@@ -78,14 +78,21 @@ checkerboard = load('./data/checkerboard.mat');
 dataset = checkerboard.checkerboard;
 k = 100;
 n_runs = 20;
+n_series = 10;
 J = zeros(n_runs, 2); % one for normal & one for ++
-for i = 1:n_runs
-    type = 'normal';
-    [w,clustering, ~] = kmeans(k, dataset, type);
-    J(i,1) = quantError(dataset, clustering, w);
-    type = '++';
-    [w,clustering, centroids] = kmeans(k, dataset, type);
-    J(i,2) = quantError(dataset, clustering, w);
+Jmin = zeros(n_series, 2);
+
+for j = 1:n_series
+    for i = 1:n_runs
+        type = 'normal';
+        [w,clustering, ~] = kmeans(k, dataset, type);
+        J(i,1) = quantError(dataset, clustering, w);
+        type = '++';
+        [w,clustering, centroids] = kmeans(k, dataset, type);
+        J(i,2) = quantError(dataset, clustering, w);
+    end
+    Jmin(j,:) = min(J,[],1);
 end
 
-Jmean = mean(J,1);
+
+
