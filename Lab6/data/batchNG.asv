@@ -49,8 +49,7 @@ for i=1:epochs
             d(:,j) = pdist2(dataset, prototypes(j,:), 'squaredeuclidean');
         end
         [M,I] = min(d,[],2);
-        [B, idx] = sort(M,2);
-        3closest = idx(
+        so
         backup = d;
         backup = backup(backup~=3);
         clustering = I;
