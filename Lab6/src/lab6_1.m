@@ -4,16 +4,15 @@ clear all;
 dataset = load('data/kmeans1.mat');
 dataset = dataset.kmeans1;
 
-% k = [2,4,8];
-k = 2
+rng('default');
+k = 4;
 
 type = 'normal';
-% type = '++';
 
 [w,clustering, centroids] = kmeans(k, dataset, type);
-
+f1 = figure;
 maxNumClusters = max(clustering);
-group = {}
+group = {};
 
 for i = 1:maxNumClusters
     idx = find(clustering==i);
@@ -30,53 +29,63 @@ for i = 1:k
     hold on;
     scatter(w(i,1),w(i,2),150,Colors{i},'filled','MarkerEdgeColor','k','LineWidth',1)
 end
-
 for i = 1:k
     for j = 2:length(centroids)
         hold on;
-        plot_arrow(centroids{j-1}(i,1), centroids{j-1}(i,2), centroids{j}(i,1), centroids{j}(i,2))
+        plot_arrow(centroids{j-1}(i,1), centroids{j-1}(i,2), centroids{j}(i,1), centroids{j}(i,2));
     end
 end
 
 
-function [w, clustering, centroids] = kmeans(k, dataset, type)
-n_points = length(dataset);
-% which cluster does the datapoint belongs to
-clustering = zeros(n_points,1);
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 
+% kmax = 32;
+% % type = '++';
+% type = 'normal';
+% Jk = zeros(kmax,1);
+% Rk = zeros(kmax,1);
+% for k = 1:kmax
+%     [w,clustering, centroids] = kmeans(k, dataset, type);
+%     % quantization error
+%     Jk(k) = quantError(dataset, clustering, w);
+%     Rk(k) = Jk(1) * k^(-2/2);
+% end
+% Dk = Rk./Jk;
+% 
+% [~, I] = max(Dk);
+% kopt = I;
+% 
+% f2 = figure;
+% plot(1:kmax, Dk)
+% hold on;
+% scatter(kopt, Dk(kopt), [], 'r')
+% xlabel('k');
+% ylabel('D(k)');
+% legend('D(k)','D(kopt)');
+% 
+% f3 = figure;
+% plot(1:kmax, Jk)
+% hold on;
+% plot(1:kmax, Rk)
+% hold on;
+% scatter([kopt;kopt], [Jk(kopt), Rk(kopt)], [], 'r')
+% xlabel('k');
+% legend('J(k)','R(k)', 'Kopt');
 
-if strcmp(type,'++') % k-means++ algorithm
-    %kmeans++
-else
-    % Randomly initialize K prototypes
-    idx = randperm(n_points,k);
-    w = dataset(idx,:); 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+checkerboard = load('./data/checkerboard.mat');
+dataset = checkerboard.checkerboard;
+k = 100;
+n_runs = 20;
+J = zeros(n_runs, 2); % one for normal & one for ++
+for i = 1:n_runs
+    type = 'normal';
+    [w,clustering, ~] = kmeans(k, dataset, type);
+    J(i,1) = quantError(dataset, clustering, w);
+    type = '++';
+    [w,clustering, centroids] = kmeans(k, dataset, type);
+    J(i,2) = quantError(dataset, clustering, w);
 end
 
-centroids = {w};
-
-no_change = 1;
-while no_change
-    old_clustering = clustering;
-    for i = 1:n_points
-        % calculate distances to all the prototypes
-        d = zeros(k,1);
-        for j = 1:length(d)
-            d(j) = sum((dataset(i,:) - w(j,:)).^2);
-        end
-        % Assign to closest prototype
-        [~,I] = min(d);
-        clustering(i) = I;      
-    end
-    
-    % recalculate centroids
-    for h = 1:k
-       w(h,:) = mean(dataset(clustering==h,:));
-    end
-    % store
-    centroids{end+1} = w;
-    if clustering == old_clustering
-        no_change = 0;
-    end    
-end
-
-end
+Jmean = mean(J,1);
